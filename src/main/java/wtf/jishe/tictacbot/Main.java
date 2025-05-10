@@ -25,7 +25,8 @@ public class Main {
         commands.addCommands(
                 Commands.slash("leave", "Makes the bot leave the server")
                         .setContexts(InteractionContextType.GUILD) // doesnt make sense in dms
-                        .setDefaultPermissions(DefaultMemberPermissions.DISABLED) // admin only
+                        .setDefaultPermissions(DefaultMemberPermissions.DISABLED), // admin only
+                Commands.slash("ping", "Get the bot's latency")
         );
 
         // send commands to discord

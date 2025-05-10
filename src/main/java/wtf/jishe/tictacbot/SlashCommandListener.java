@@ -13,6 +13,11 @@ public class SlashCommandListener extends ListenerAdapter {
                     .setEphemeral(true)
                     .flatMap(m -> Objects.requireNonNull(event.getGuild()).leave())
                     .queue();
+            case "ping" -> {
+                // Get the bot's latency
+                event.reply("Pong! " + event.getJDA().getGatewayPing() + "ms")
+                    .queue();
+            }
         }
     }
 }
