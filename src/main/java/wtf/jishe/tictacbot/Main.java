@@ -17,25 +17,38 @@ import java.util.logging.Logger;
 
 public class Main {
     public static void main(String[] args) {
+		JDA jda = initializeJDA();
+		registerCommands(jda);
+	}
+
+	public static JDA initializeJDA() {
 		Properties config = new Properties();
-		JDA jda = null;
+		Logger logger = Logger.getLogger(Main.class.getName());
 		try (FileInputStream fis = new FileInputStream("config.properties")) {
 			config.load(fis);
 			String token = config.getProperty("token").trim();
 
+			if (token.isEmpty()) {
+				throw new IllegalStateException("Token not found in config file");
+			}
+
 			// build JDA instance
-			jda = JDABuilder.createLight(token, Collections.emptyList())
+			return JDABuilder.createLight(token, Collections.emptyList())
 					.addEventListeners(new SlashCommandListener())
 					.build();
 		} catch (IOException e) {
-			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, "Failed to load config file", e);
-			System.exit(0);
+			logger.log(Level.SEVERE, "Failed to load config file", e);
+			throw new RuntimeException("Failed to load bot due to config file error", e);
 		} catch (InvalidTokenException e) {
-			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, "Invalid or missing token!", e);
-			System.exit(0);
+			logger.log(Level.SEVERE, "Invalid token!", e);
+			throw new RuntimeException("Failed to load bot due to invalid token", e);
+		} catch (IllegalStateException e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
+			throw new RuntimeException("Failed to load bot due to missing token", e);
 		}
+	}
 
-		// Register slash commands
+	public static void registerCommands(JDA jda) {
 		CommandListUpdateAction commands = jda.updateCommands();
 
 		// add slash commands to this action instance
