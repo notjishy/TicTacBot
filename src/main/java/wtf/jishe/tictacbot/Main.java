@@ -5,12 +5,14 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.exceptions.InvalidTokenException;
 import net.dv8tion.jda.api.interactions.InteractionContextType;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,7 +58,11 @@ public class Main {
 				Commands.slash("leave", "Makes the bot leave the server")
 						.setContexts(InteractionContextType.GUILD) // doesnt make sense in dms
 						.setDefaultPermissions(DefaultMemberPermissions.DISABLED), // admin only
-				Commands.slash("ping", "Get the bot's latency")
+				Commands.slash("ping", "Get the bot's latency"),
+				Commands.slash("tictactoe", "Play a game of tic tac toe")
+						// require user to mention another user
+						.addOption(OptionType.USER, "player2", "Who to challenge", true)
+						.setContexts(InteractionContextType.GUILD) // doesnt make sense in dms
 		);
 
 		// send commands to discord
