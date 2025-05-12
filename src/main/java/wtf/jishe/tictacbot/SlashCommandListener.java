@@ -1,5 +1,6 @@
 package wtf.jishe.tictacbot;
 
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import wtf.jishe.tictacbot.game.GameManager;
@@ -24,15 +25,19 @@ public class SlashCommandListener extends ListenerAdapter {
                 // get the user who invoked the command
                 String player1Id = event.getUser().getId();
 
-                // get player 2 from the command options
-                String player2Id = Objects.requireNonNull(event.getOption("player2")).getAsUser().getId();
+                // get player 2 from the command option
+                User player2 = Objects.requireNonNull(event.getOption("player2")).getAsUser();
+                String player2Id = player2.getId();
 
                 // get current channel id
                 String channelId = event.getChannel().getId();
 
-                // ensure player 2 isn't the same person
+                // ensure player 2 isn't the same person or a bot
                 if (player1Id.equals(player2Id)) {
                     event.reply("You can't play against yourself!").setEphemeral(true).queue();
+                    return;
+                } else if (player2.isBot()) {
+                    event.reply("You can't play against a bot!").setEphemeral(true).queue();
                     return;
                 }
 
