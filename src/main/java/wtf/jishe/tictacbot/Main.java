@@ -30,10 +30,6 @@ public class Main {
 			config.load(fis);
 			String token = config.getProperty("token").trim();
 
-			if (token.isEmpty()) {
-				throw new IllegalStateException("Token not found in config file");
-			}
-
 			// build JDA instance
 			return JDABuilder.createLight(token, Collections.emptyList())
 					.addEventListeners(new SlashCommandListener())
@@ -41,12 +37,12 @@ public class Main {
 		} catch (IOException e) {
 			logger.log(Level.SEVERE, "Failed to load config file", e);
 			throw new RuntimeException("Failed to load bot due to config file error", e);
+		} catch (IllegalArgumentException e) {
+			logger.log(Level.SEVERE, "Missing token!", e);
+			throw new RuntimeException("Failed to load bot due to missing token", e);
 		} catch (InvalidTokenException e) {
 			logger.log(Level.SEVERE, "Invalid token!", e);
 			throw new RuntimeException("Failed to load bot due to invalid token", e);
-		} catch (IllegalStateException e) {
-			logger.log(Level.SEVERE, e.getMessage(), e);
-			throw new RuntimeException("Failed to load bot due to missing token", e);
 		}
 	}
 
