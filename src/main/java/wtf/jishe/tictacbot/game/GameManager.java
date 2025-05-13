@@ -21,4 +21,16 @@ public class GameManager {
         }
         activeGames.put(channelId, game);
     }
+
+    public TicTacToeGame getGame(String channelId) {
+        return activeGames.get(channelId);
+    }
+
+    public void removeGame(String channelId) {
+        activeGames.remove(channelId);
+    }
+
+    public boolean hasActiveGame(String channelId) {
+        return activeGames.containsKey(channelId);
+    }
 }

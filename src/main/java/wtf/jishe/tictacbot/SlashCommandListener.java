@@ -3,6 +3,8 @@ package wtf.jishe.tictacbot;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
 import wtf.jishe.tictacbot.game.GameManager;
 import wtf.jishe.tictacbot.game.TicTacToeGame;
 
@@ -21,7 +23,8 @@ public class SlashCommandListener extends ListenerAdapter {
                         .queue();
             case "tictactoe" -> {
                 // get the user who invoked the command
-                String player1Id = event.getUser().getId();
+                User player1 = event.getUser();
+                String player1Id = player1.getId();
 
                 // get player 2 from the command option
                 User player2 = Objects.requireNonNull(event.getOption("player2")).getAsUser();
@@ -44,7 +47,25 @@ public class SlashCommandListener extends ListenerAdapter {
                     GameManager.getInstance().addGame(channelId, game);
                 } catch (IllegalStateException ignored) {
                     event.reply("A game is already active in this channel.").setEphemeral(true).queue();
+                    return;
                 }
+
+                // create message with board display and buttons for moves
+                MessageCreateBuilder message = new MessageCreateBuilder()
+                        .setContent("Game started! " + player1.getAsMention() + " vs " + player2.getAsMention())
+                        .addActionRow(
+                                Button.primary("ttt_1", "1"),
+                                Button.primary("ttt_2", "2"),
+                                Button.primary("ttt_3", "3"),
+                                Button.primary("ttt_4", "4"),
+                                Button.primary("ttt_5", "5"),
+                                Button.primary("ttt_6", "6"),
+                                Button.primary("ttt_7", "7"),
+                                Button.primary("ttt_8", "8"),
+                                Button.primary("ttt_9", "9")
+                        );
+
+                event.reply(message.build()).queue();
             }
         }
     }
