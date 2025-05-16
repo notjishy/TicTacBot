@@ -2,7 +2,6 @@ package wtf.jishe.tictacbot;
 
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import org.jetbrains.annotations.NotNull;
 import wtf.jishe.tictacbot.game.Buttons;
 import wtf.jishe.tictacbot.game.GameManager;
@@ -29,7 +28,9 @@ public class ButtonInteractionListener extends ListenerAdapter {
 
 		// "!" suffix indicates a completed row and column button
 		if (!Objects.requireNonNull(event.getButton().getId()).endsWith("!")) {
-			Buttons.setColumnButtons(event);
+			event.editMessage(event.getMessage().getContentRaw())
+					.setActionRow(Buttons.getColumnButtons(event.getButton().getId()))
+					.queue();
 		} else {
 			String[] parts = event.getButton().getId().split("_");
 			row = switch (parts[2]) {
@@ -47,7 +48,9 @@ public class ButtonInteractionListener extends ListenerAdapter {
 			boolean success = game.makeMove(row, col);
 			if (!success) {
 				event.reply("Cell already taken!").setEphemeral(true).queue();
-				Buttons.setRowButtons(event);
+				event.editMessage(event.getMessage().getContentRaw())
+						.setActionRow(Buttons.getRowButtons())
+						.queue();
 			} else {
 				StringBuilder message = new StringBuilder();
 				String calloutMessage = "";
@@ -55,7 +58,9 @@ public class ButtonInteractionListener extends ListenerAdapter {
 				// check for any win conditions
 				if (game.getState() != GameState.ACTIVE) {
 					switch (game.getState()) {
-						case GameState.PLAYER1_WIN, GameState.PLAYER2_WIN -> calloutMessage += "\n" + game.getCurrentPlayer().getAsMention() + " wins!";
+						case GameState.PLAYER1_WIN, GameState.PLAYER2_WIN -> {
+							calloutMessage += "\n" + game.getCurrentPlayer().getAsMention() + " wins!\n";
+						}
 						case GameState.DRAW -> calloutMessage += "\nIt's a draw!";
 					}
 

@@ -3,7 +3,6 @@ package wtf.jishe.tictacbot;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
 import wtf.jishe.tictacbot.game.Buttons;
 import wtf.jishe.tictacbot.game.GameManager;
