@@ -9,6 +9,7 @@ import wtf.jishe.tictacbot.game.GameState;
 import wtf.jishe.tictacbot.game.TicTacToeGame;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class ButtonInteractionListener extends ListenerAdapter {
 	@Override
@@ -47,10 +48,12 @@ public class ButtonInteractionListener extends ListenerAdapter {
 			// process players move
 			boolean success = game.makeMove(row, col);
 			if (!success) {
-				event.reply("Cell already taken!").setEphemeral(true).queue();
 				event.editMessage(event.getMessage().getContentRaw())
 						.setActionRow(Buttons.getRowButtons())
 						.queue();
+				event.getChannel().sendMessage("That cell is already taken!").queue(
+						message -> message.delete().queueAfter(5, TimeUnit.SECONDS)
+				);
 			} else {
 				StringBuilder message = new StringBuilder();
 				String calloutMessage = "";
@@ -58,9 +61,8 @@ public class ButtonInteractionListener extends ListenerAdapter {
 				// check for any win conditions
 				if (game.getState() != GameState.ACTIVE) {
 					switch (game.getState()) {
-						case GameState.PLAYER1_WIN, GameState.PLAYER2_WIN -> {
+						case GameState.PLAYER1_WIN, GameState.PLAYER2_WIN ->
 							calloutMessage += "\n" + game.getCurrentPlayer().getAsMention() + " wins!\n";
-						}
 						case GameState.DRAW -> calloutMessage += "\nIt's a draw!";
 					}
 
