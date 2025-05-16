@@ -25,9 +25,6 @@ public class TicTacToeGame {
 			return false; // cell taken cannot make move
 		}
 
-		// switch player turn
-		currentTurn = currentTurn.equals(player1) ? player2 : player1;
-
 		// check for win conditions
 		if (board.checkWin(currentTurn.equals(player1) ? 'X' : 'O')) {
 			state = currentTurn.equals(player1) ? GameState.PLAYER1_WIN : GameState.PLAYER2_WIN;
@@ -35,6 +32,11 @@ public class TicTacToeGame {
 		// check for draw
 		else if (board.isDraw()) {
 			state = GameState.DRAW;
+		}
+
+		// switch player turn
+		if (state == GameState.ACTIVE) {
+			currentTurn = currentTurn.equals(player1) ? player2 : player1;
 		}
 
 		return true;

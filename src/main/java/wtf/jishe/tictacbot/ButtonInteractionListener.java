@@ -49,23 +49,29 @@ public class ButtonInteractionListener extends ListenerAdapter {
 				event.reply("Cell already taken!").setEphemeral(true).queue();
 				Buttons.setRowButtons(event);
 			} else {
-				String message = game.getCurrentPlayer().getAsMention() + "'s turn!\n" +
-						game.getBoardDisplay();
+				StringBuilder message = new StringBuilder();
+				String calloutMessage = "";
 
 				// check for any win conditions
 				if (game.getState() != GameState.ACTIVE) {
-					// game is over, remove game from GameManager
-					GameManager.getInstance().removeGame(event.getChannel().getId());
-
 					switch (game.getState()) {
-						case PLAYER1_WIN, PLAYER2_WIN -> message += "\n" + event.getUser().getAsMention() + " wins!";
-						case DRAW -> message += "\nIt's a draw!";
+						case GameState.PLAYER1_WIN, GameState.PLAYER2_WIN -> calloutMessage += "\n" + game.getCurrentPlayer().getAsMention() + " wins!";
+						case GameState.DRAW -> calloutMessage += "\nIt's a draw!";
 					}
 
+					message.append(calloutMessage);
+					message.append(game.getBoardDisplay());
+
 					// update board message
-					event.getMessage().editMessage(message).queue();
+					event.getChannel().sendMessage(message.toString()).queue();
+
+					// game is over, remove game from GameManager
+					GameManager.getInstance().removeGame(event.getChannel().getId());
 				} else {
 					// update board message
+					message.append(game.getCurrentPlayer().getAsMention());
+					message.append("'s turn!\n");
+					message.append(game.getBoardDisplay());
 					event.getChannel().sendMessage(message)
 							.setActionRow(Buttons.getRowButtons()).queue();
 				}
