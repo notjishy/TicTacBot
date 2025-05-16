@@ -1,6 +1,5 @@
 package wtf.jishe.tictacbot.game;
 
-import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 public class Buttons {
