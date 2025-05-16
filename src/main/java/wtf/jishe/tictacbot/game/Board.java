@@ -58,7 +58,26 @@ public class Board {
 	}
 
 	public String getBoardDisplay() {
-		// TODO return formatted string of board for discord message
-		return ""; // placeholder return
+		StringBuilder display = new StringBuilder();
+		display.append("     1     2    3\n"); // column labels
+
+		for (int i = 0; i < 3; i++) {
+			display.append((char)('a' + i)); // row labels
+			for (int j = 0; j < 3; j++) {
+				if (grid[i][j] == ' ') {
+					display.append(" | ").append("   "); // empty cell (wider for alignment)
+				} else {
+					display.append(" | ").append(grid[i][j]); // occupied cell
+				}
+
+			}
+			display.append(" |\n");
+
+			// horizontal divider
+			if (i < 2) {
+				display.append("   -----------\n");
+			}
+		}
+		return display.toString();
 	}
 }

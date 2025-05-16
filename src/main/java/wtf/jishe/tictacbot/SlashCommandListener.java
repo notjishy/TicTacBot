@@ -50,19 +50,16 @@ public class SlashCommandListener extends ListenerAdapter {
 					return;
 				}
 
+				String messageText = "Game started! " + player1.getAsMention() + " vs " + player2.getAsMention() + "\n" +
+						game.getBoardDisplay();
+
 				// create message with board display and buttons for moves
 				MessageCreateBuilder message = new MessageCreateBuilder()
-						.setContent("Game started! " + player1.getAsMention() + " vs " + player2.getAsMention())
+						.setContent(messageText)
 						.addActionRow(
-								Button.primary("ttt_1", "1"),
-								Button.primary("ttt_2", "2"),
-								Button.primary("ttt_3", "3"),
-								Button.primary("ttt_4", "4"),
-								Button.primary("ttt_5", "5"),
-								Button.primary("ttt_6", "6"),
-								Button.primary("ttt_7", "7"),
-								Button.primary("ttt_8", "8"),
-								Button.primary("ttt_9", "9")
+								Button.primary("ttt_a", "A"),
+								Button.primary("ttt_b", "B"),
+								Button.primary("ttt_c", "C")
 						);
 
 				event.reply(message.build()).queue();
