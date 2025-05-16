@@ -37,14 +37,15 @@ public class Main {
 					.build();
 		} catch (IOException e) {
 			logger.log(Level.SEVERE, "Failed to load config file", e);
-			throw new RuntimeException("Failed to load bot due to config file error", e);
+			System.exit(1);
 		} catch (IllegalArgumentException e) {
 			logger.log(Level.SEVERE, "Missing token!", e);
-			throw new RuntimeException("Failed to load bot due to missing token", e);
+			System.exit(1);
 		} catch (InvalidTokenException e) {
 			logger.log(Level.SEVERE, "Invalid token!", e);
-			throw new RuntimeException("Failed to load bot due to invalid token", e);
+			System.exit(1);
 		}
+		return null;
 	}
 
 	public static void registerCommands(JDA jda) {
