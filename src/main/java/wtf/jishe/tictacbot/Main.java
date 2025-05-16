@@ -33,6 +33,7 @@ public class Main {
 			// build JDA instance
 			return JDABuilder.createLight(token, Collections.emptyList())
 					.addEventListeners(new SlashCommandListener())
+					.addEventListeners(new ButtonInteractionListener())
 					.build();
 		} catch (IOException e) {
 			logger.log(Level.SEVERE, "Failed to load config file", e);

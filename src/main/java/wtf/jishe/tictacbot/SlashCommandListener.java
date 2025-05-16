@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
+import wtf.jishe.tictacbot.game.Buttons;
 import wtf.jishe.tictacbot.game.GameManager;
 import wtf.jishe.tictacbot.game.TicTacToeGame;
 
@@ -56,11 +57,7 @@ public class SlashCommandListener extends ListenerAdapter {
 				// create message with board display and buttons for moves
 				MessageCreateBuilder message = new MessageCreateBuilder()
 						.setContent(messageText)
-						.addActionRow(
-								Button.primary("ttt_a", "A"),
-								Button.primary("ttt_b", "B"),
-								Button.primary("ttt_c", "C")
-						);
+						.addActionRow(Buttons.getRowButtons());
 
 				event.reply(message.build()).queue();
 			}
