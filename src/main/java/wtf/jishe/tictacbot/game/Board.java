@@ -47,10 +47,14 @@ public class Board {
 	}
 
 	public boolean isDraw() {
+		int count = 0;
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
 				if (grid[i][j] == ' ') {
-					return false; // found empty cell, game not draw
+					count++; // found empty cell
+					if (count > 1) {
+						return false; // game not draw
+					}
 				}
 			}
 		}

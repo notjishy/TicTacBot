@@ -63,7 +63,7 @@ public class ButtonInteractionListener extends ListenerAdapter {
 					switch (game.getState()) {
 						case GameState.PLAYER1_WIN, GameState.PLAYER2_WIN ->
 							calloutMessage += "\n" + game.getCurrentPlayer().getAsMention() + " wins!\n";
-						case GameState.DRAW -> calloutMessage += "\nIt's a draw!";
+						case GameState.DRAW -> calloutMessage += "\nIt's a draw!\n";
 					}
 
 					message.append(calloutMessage);
