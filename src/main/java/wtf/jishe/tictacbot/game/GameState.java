@@ -4,5 +4,6 @@ public enum GameState {
 	ACTIVE,
 	PLAYER1_WIN,
 	PLAYER2_WIN,
-	DRAW
+	DRAW,
+	DNF
 }

@@ -69,10 +69,10 @@ public class TicTacToeGame {
 	private void startTurnTimer() {
 		cancelTurnTimer();
 		timeoutTask = schedular.schedule(() -> {
-			state = GameState.DRAW;
+			state = GameState.DNF;
 			endGame();
 
-			channel.sendMessage("Game ended in a draw due to inactivity.").queue();
+			channel.sendMessage("you took too long, game over. smh.").queue();
 		}, 30, TimeUnit.SECONDS);
 	}
 
