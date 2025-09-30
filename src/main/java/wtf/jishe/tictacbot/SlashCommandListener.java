@@ -1,6 +1,7 @@
 package wtf.jishe.tictacbot;
 
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
@@ -32,6 +33,7 @@ public class SlashCommandListener extends ListenerAdapter {
 
 				// get current channel id
 				String channelId = event.getChannel().getId();
+				MessageChannel channel = event.getChannel();
 
 				// ensure player 2 isn't the same person or a bot
 				if (player1Id.equals(player2Id)) {
@@ -42,7 +44,7 @@ public class SlashCommandListener extends ListenerAdapter {
 					return;
 				}
 
-				TicTacToeGame game = new TicTacToeGame(player1Id, player2Id);
+				TicTacToeGame game = new TicTacToeGame(player1Id, player2Id, channel);
 				try {
 					GameManager.getInstance().addGame(channelId, game);
 				} catch (IllegalStateException ignored) {
