@@ -1,9 +1,7 @@
 package wtf.jishe.tictacbot;
 
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
-import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.requests.ErrorResponse;
 import org.jetbrains.annotations.NotNull;
 import wtf.jishe.tictacbot.game.Buttons;
 import wtf.jishe.tictacbot.game.GameManager;
