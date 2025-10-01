@@ -3,6 +3,8 @@ package wtf.jishe.tictacbot.game;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.UserSnowflake;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
+import net.dv8tion.jda.api.requests.ErrorResponse;
 
 import java.util.concurrent.*;
 
@@ -12,6 +14,7 @@ public class TicTacToeGame {
 	private final UserSnowflake player1;
 	private final UserSnowflake player2;
 	private GameState state;
+	private String lastMessageId;
 
 	private final ScheduledExecutorService schedular = Executors.newSingleThreadScheduledExecutor();
 	private ScheduledFuture<?> timeoutTask;
@@ -87,6 +90,24 @@ public class TicTacToeGame {
 	public void endGame() {
 		schedular.shutdownNow();
 		GameManager.getInstance().removeGame(channel.getId());
+	}
+
+	public String getLastMessageId() {
+		return lastMessageId;
+	}
+
+	public void deleteLastMessage(MessageChannel channel) {
+		if (getLastMessageId() != null) {
+			channel.deleteMessageById(getLastMessageId()).queue(null, failure -> {
+				if (failure instanceof ErrorResponseException e && e.getErrorResponse() == ErrorResponse.UNKNOWN_MESSAGE) {
+					System.out.println("Error deleting message: " + e.getMessage());
+				}
+			});
+		}
+	}
+
+	public void setLastMessageId(String messageId) {
+		this.lastMessageId = messageId;
 	}
 
 	public UserSnowflake getCurrentPlayer() {

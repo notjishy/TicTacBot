@@ -60,7 +60,13 @@ public class SlashCommandListener extends ListenerAdapter {
 						.setContent(messageText)
 						.addActionRow(Buttons.getRowButtons());
 
-				event.reply(message.build()).queue();
+				event.reply(message.build())
+						.queue(hook ->
+								hook.retrieveOriginal()
+										.queue(sentMessage ->
+												game.setLastMessageId(sentMessage.getId())
+										)
+						);
 			}
 		}
 	}

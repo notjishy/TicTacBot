@@ -1,7 +1,9 @@
 package wtf.jishe.tictacbot;
 
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.ErrorResponse;
 import org.jetbrains.annotations.NotNull;
 import wtf.jishe.tictacbot.game.Buttons;
 import wtf.jishe.tictacbot.game.GameManager;
@@ -66,6 +68,8 @@ public class ButtonInteractionListener extends ListenerAdapter {
 						case GameState.DRAW -> calloutMessage += "\nIt's a draw!\n";
 					}
 
+					game.deleteLastMessage(event.getChannel());
+
 					message.append(calloutMessage);
 					message.append(game.getBoardDisplay());
 
@@ -79,8 +83,12 @@ public class ButtonInteractionListener extends ListenerAdapter {
 					message.append(game.getCurrentPlayer().getAsMention());
 					message.append("'s turn!\n");
 					message.append(game.getBoardDisplay());
+
+					game.deleteLastMessage(event.getChannel());
+
 					event.getChannel().sendMessage(message)
-							.setActionRow(Buttons.getRowButtons()).queue();
+							.setActionRow(Buttons.getRowButtons())
+							.queue(sentMessage -> game.setLastMessageId(sentMessage.getId()));
 				}
 			}
 		}
