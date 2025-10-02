@@ -62,7 +62,8 @@ public class Main {
 					Commands.slash("tictactoe", "Play a game of tic tac toe")
 							// require user to mention another user
 							.addOption(OptionType.USER, "player2", "Who to challenge", true)
-							.setContexts(InteractionContextType.GUILD) // doesnt make sense in dms
+							.setContexts(InteractionContextType.GUILD), // doesnt make sense in dms
+					Commands.slash("endgame", "end the current game running in this channel")
 			).queue(
 					success -> logger.info("Successfully registered application commands"),
 					error -> {

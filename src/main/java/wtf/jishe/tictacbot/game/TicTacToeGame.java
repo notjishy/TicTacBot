@@ -121,6 +121,14 @@ public class TicTacToeGame {
 		return currentTurn;
 	}
 
+	public UserSnowflake getPlayer1() {
+		return player1;
+	}
+
+	public UserSnowflake getPlayer2() {
+		return player2;
+	}
+
 	public GameState getState() {
 		return state;
 	}

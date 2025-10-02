@@ -1,6 +1,7 @@
 package wtf.jishe.tictacbot;
 
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.UserSnowflake;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -67,6 +68,25 @@ public class SlashCommandListener extends ListenerAdapter {
 												game.setLastMessageId(sentMessage.getId())
 										)
 						);
+			}
+			case "endgame" -> {
+				String channelId = event.getChannel().getId();
+				TicTacToeGame game = GameManager.getInstance().getGame(channelId);
+
+				if (game == null) {
+					event.reply("there are no games running in this channel idiot").queue();
+					return;
+				}
+
+				UserSnowflake commandUser = User.fromId(event.getUser().getId());
+				if (!Objects.equals(game.getPlayer1(), commandUser) && !Objects.equals(game.getPlayer2(), commandUser)) {
+					event.reply("you arent part of this game you cant end it, fuck off").queue();
+					return;
+				}
+
+				event.reply("wow okay i see how it is. ending the game now..").queue();
+
+				game.endGame(false);
 			}
 		}
 	}
