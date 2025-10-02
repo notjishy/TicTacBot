@@ -15,12 +15,12 @@ public class SlashCommandListener extends ListenerAdapter {
 	@Override
 	public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
 		switch (event.getName()) {
-			case "leave" -> event.reply("Bye bye!")
+			case "leave" -> event.reply("goodbye didnt wanna be here anyway")
 					.setEphemeral(true)
 					.flatMap(m -> Objects.requireNonNull(event.getGuild()).leave())
 					.queue();
 			case "ping" -> // Get the bot's latency
-					event.reply("Pong! " + event.getJDA().getGatewayPing() + "ms")
+					event.reply("pong! " + event.getJDA().getGatewayPing() + "ms")
 							.queue();
 			case "tictactoe" -> {
 				// get the user who invoked the command
@@ -37,10 +37,10 @@ public class SlashCommandListener extends ListenerAdapter {
 
 				// ensure player 2 isn't the same person or a bot
 				if (player1Id.equals(player2Id)) {
-					event.reply("You can't play against yourself!").setEphemeral(true).queue();
+					event.reply("sorry i get youre lonely but you cant play against youreself").setEphemeral(true).queue();
 					return;
 				} else if (player2.isBot()) {
-					event.reply("You can't play against a bot!").setEphemeral(true).queue();
+					event.reply("clankers are not allowed to play... except me").setEphemeral(true).queue();
 					return;
 				}
 
@@ -48,11 +48,11 @@ public class SlashCommandListener extends ListenerAdapter {
 				try {
 					GameManager.getInstance().addGame(channelId, game);
 				} catch (IllegalStateException ignored) {
-					event.reply("A game is already active in this channel.").setEphemeral(true).queue();
+					event.reply("one game per channel fuckass dont be greedy").setEphemeral(true).queue();
 					return;
 				}
 
-				String messageText = "Game started! " + player1.getAsMention() + " vs " + player2.getAsMention() + "\n" +
+				String messageText = "starting game. " + player1.getAsMention() + " vs " + player2.getAsMention() + "\n" +
 						game.getBoardDisplay();
 
 				// create message with board display and buttons for moves

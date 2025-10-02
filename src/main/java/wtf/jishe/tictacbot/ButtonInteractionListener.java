@@ -23,7 +23,7 @@ public class ButtonInteractionListener extends ListenerAdapter {
 
 		// verify player's turn
 		if (!game.getCurrentPlayer().equals(event.getUser())) {
-			event.reply("It's not your turn!").setEphemeral(true).queue();
+			event.reply("not your turn yet calm down").setEphemeral(true).queue();
 			return;
 		}
 
@@ -59,7 +59,7 @@ public class ButtonInteractionListener extends ListenerAdapter {
 				event.editMessage(event.getMessage().getContentRaw())
 						.setActionRow(Buttons.getRowButtons())
 						.queue();
-				event.getChannel().sendMessage("That cell is already taken!").queue(
+				event.getChannel().sendMessage("that cell is taken already dumbass").queue(
 						message -> message.delete().queueAfter(5, TimeUnit.SECONDS)
 				);
 			} else {
@@ -70,8 +70,8 @@ public class ButtonInteractionListener extends ListenerAdapter {
 				if (game.getState() != GameState.ACTIVE) {
 					switch (game.getState()) {
 						case GameState.PLAYER1_WIN, GameState.PLAYER2_WIN ->
-							calloutMessage += "\n" + game.getCurrentPlayer().getAsMention() + " wins!\n";
-						case GameState.DRAW -> calloutMessage += "\nIt's a draw!\n";
+							calloutMessage += "\n" + game.getCurrentPlayer().getAsMention() + " has won!\n";
+						case GameState.DRAW -> calloutMessage += "\ndraw! kinda lame\n";
 					}
 
 					message.append(calloutMessage);
