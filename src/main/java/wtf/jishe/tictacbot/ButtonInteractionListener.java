@@ -34,6 +34,14 @@ public class ButtonInteractionListener extends ListenerAdapter {
 					.queue();
 		} else {
 			String[] parts = event.getButton().getId().split("_");
+
+			if (parts[3].equals("back!")) {
+				event.editMessage(event.getMessage().getContentRaw())
+						.setActionRow(Buttons.getRowButtons())
+						.queue();
+				return;
+			}
+
 			row = switch (parts[2]) {
 				case "a" -> 0;
 				case "b" -> 1;
