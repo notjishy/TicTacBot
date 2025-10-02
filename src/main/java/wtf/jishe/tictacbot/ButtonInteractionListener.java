@@ -74,13 +74,11 @@ public class ButtonInteractionListener extends ListenerAdapter {
 						case GameState.DRAW -> calloutMessage += "\nIt's a draw!\n";
 					}
 
-					game.deleteLastMessage(event.getChannel());
-
 					message.append(calloutMessage);
 					message.append(game.getBoardDisplay());
 
 					// update board message
-					event.getChannel().sendMessage(message.toString()).queue();
+					game.editLastMessage(event.getChannel(), message.toString());
 
 					// game is over, remove game from GameManager
 					GameManager.getInstance().removeGame(event.getChannel().getId());
@@ -90,11 +88,11 @@ public class ButtonInteractionListener extends ListenerAdapter {
 					message.append("'s turn!\n");
 					message.append(game.getBoardDisplay());
 
-					game.deleteLastMessage(event.getChannel());
+					game.editLastMessage(event.getChannel(), message.toString());
 
-					event.getChannel().sendMessage(message)
+					/*event.getChannel().sendMessage(message)
 							.setActionRow(Buttons.getRowButtons())
-							.queue(sentMessage -> game.setLastMessageId(sentMessage.getId()));
+							.queue(sentMessage -> game.setLastMessageId(sentMessage.getId()));*/
 				}
 			}
 		}

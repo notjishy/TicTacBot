@@ -76,7 +76,7 @@ public class TicTacToeGame {
 		cancelTurnTimer();
 		timeoutTask = schedular.schedule(() -> {
 			state = GameState.DNF;
-			endGame();
+			endGame(false);
 
 			channel.sendMessage("you took too long, game over. smh.").queue();
 		}, 30, TimeUnit.SECONDS);
@@ -90,22 +90,26 @@ public class TicTacToeGame {
 	}
 
 	// end the game and shutdown the scheduler
-	public void endGame() {
+	public void endGame(Boolean isError) {
 		schedular.shutdownNow();
 		GameManager.getInstance().removeGame(channel.getId());
+
+		channel.sendMessage("well, fuck. an error has occurred and the game has been ended.").queue();
 	}
 
 	public String getLastMessageId() {
 		return lastMessageId;
 	}
 
-	public void deleteLastMessage(MessageChannel channel) {
+	public void editLastMessage(MessageChannel channel, String message) {
 		if (getLastMessageId() != null) {
-			channel.deleteMessageById(getLastMessageId()).queue(null, failure -> {
-				if (failure instanceof ErrorResponseException e && e.getErrorResponse() == ErrorResponse.UNKNOWN_MESSAGE) {
-					System.out.println("Error deleting message: " + e.getMessage());
-				}
-			});
+			channel.editMessageById(getLastMessageId(), message)
+					.setActionRow(Buttons.getRowButtons())
+					.queue(null, this::handleEditFailure);
+		}
+
+		if (state != GameState.ACTIVE) {
+			channel.editMessageComponentsById(getLastMessageId()).queue(null, this::handleEditFailure);
 		}
 	}
 
@@ -123,5 +127,13 @@ public class TicTacToeGame {
 
 	public String getBoardDisplay() {
 		return board.getBoardDisplay();
+	}
+
+	private void handleEditFailure(Throwable failure) {
+		if (failure instanceof ErrorResponseException e && e.getErrorResponse() == ErrorResponse.UNKNOWN_MESSAGE) {
+			System.out.println("error editing message: " + e.getMessage());
+		}
+
+		endGame(true);
 	}
 }
