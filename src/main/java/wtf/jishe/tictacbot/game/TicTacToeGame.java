@@ -94,7 +94,9 @@ public class TicTacToeGame {
 		schedular.shutdownNow();
 		GameManager.getInstance().removeGame(channel.getId());
 
-		channel.sendMessage("well, fuck. an error has occurred and the game has been ended.").queue();
+		if (isError) {
+			channel.sendMessage("well, fuck. an error has occurred and the game has been ended.").queue();
+		}
 	}
 
 	public String getLastMessageId() {
