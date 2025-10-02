@@ -15,6 +15,8 @@ import java.util.Objects;
 public class SlashCommandListener extends ListenerAdapter {
 	@Override
 	public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
+		UserSnowflake botUser = User.fromId(event.getUser().getId());
+
 		switch (event.getName()) {
 			case "leave" -> event.reply("goodbye didnt wanna be here anyway")
 					.setEphemeral(true)
@@ -24,9 +26,7 @@ public class SlashCommandListener extends ListenerAdapter {
 					event.reply("pong! " + event.getJDA().getGatewayPing() + "ms")
 							.queue();
 			case "tictactoe" -> {
-				// get the user who invoked the command
-				User player1 = event.getUser();
-				String player1Id = player1.getId();
+				String player1Id = botUser.getId();
 
 				// get player 2 from the command option
 				User player2 = Objects.requireNonNull(event.getOption("player2")).getAsUser();
@@ -53,7 +53,7 @@ public class SlashCommandListener extends ListenerAdapter {
 					return;
 				}
 
-				String messageText = "starting game. " + player1.getAsMention() + " vs " + player2.getAsMention() + "\n" +
+				String messageText = "starting game. " + botUser.getAsMention() + " vs " + player2.getAsMention() + "\n" +
 						game.getBoardDisplay();
 
 				// create message with board display and buttons for moves
@@ -78,8 +78,7 @@ public class SlashCommandListener extends ListenerAdapter {
 					return;
 				}
 
-				UserSnowflake commandUser = User.fromId(event.getUser().getId());
-				if (!Objects.equals(game.getPlayer1(), commandUser) && !Objects.equals(game.getPlayer2(), commandUser)) {
+				if (!Objects.equals(game.getPlayer1(), botUser) && !Objects.equals(game.getPlayer2(), botUser)) {
 					event.reply("you arent part of this game you cant end it, fuck off").queue();
 					return;
 				}
