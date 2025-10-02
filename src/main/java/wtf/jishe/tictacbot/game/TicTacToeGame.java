@@ -9,6 +9,9 @@ import net.dv8tion.jda.api.requests.ErrorResponse;
 import java.util.concurrent.*;
 
 public class TicTacToeGame {
+	private final String player1Symbol = "\uD83C\uDDFD"; // regional indicator x
+	private final String player2Symbol = "\uD83C\uDD7E\uFE0F"; // o blood type
+
 	private final Board board;
 	private UserSnowflake currentTurn;
 	private final UserSnowflake player1;
@@ -36,7 +39,7 @@ public class TicTacToeGame {
 		cancelTurnTimer();
 
 		// make move on board
-		boolean moveMade = board.makeMove(row, col, currentTurn.equals(player1) ? 'X' : 'O');
+		boolean moveMade = board.makeMove(row, col, currentTurn.equals(player1) ? player1Symbol : player2Symbol);
 		if (!moveMade) {
 			return false; // cell taken cannot make move
 		}
@@ -49,7 +52,7 @@ public class TicTacToeGame {
 
 	private void updateGameState() {
 		// check for win conditions
-		if (board.checkWin(currentTurn.equals(player1) ? 'X' : 'O')) {
+		if (board.checkWin(currentTurn.equals(player1) ? player1Symbol : player2Symbol)) {
 			state = currentTurn.equals(player1) ? GameState.PLAYER1_WIN : GameState.PLAYER2_WIN;
 		}
 		// check for draw

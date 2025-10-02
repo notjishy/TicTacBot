@@ -1,23 +1,26 @@
 package wtf.jishe.tictacbot.game;
 
+import java.util.Objects;
+
 public class Board {
-	private final char[][] grid;
+	private final String[][] grid;
+	private final String emptySpace = "⬛";
 
 	public Board() {
-		grid = new char[3][3];
+		grid = new String[3][3];
 		initializeBoard();
 	}
 
 	private void initializeBoard() {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				grid[i][j] = ' ';
+				grid[i][j] = emptySpace;
 			}
 		}
 	}
 
-	public boolean makeMove(int row, int col, char symbol) {
-		if (grid[row][col] == ' ') {
+	public boolean makeMove(int row, int col, String symbol) {
+		if (Objects.equals(grid[row][col], emptySpace)) {
 			grid[row][col] = symbol;
 
 			return true; // move successful
@@ -26,31 +29,31 @@ public class Board {
 		}
 	}
 
-	public boolean checkWin(char symbol) {
+	public boolean checkWin(String symbol) {
 		// check rows
 		for (int i = 0; i < 3; i++) {
-			if (grid[i][0] == symbol && grid[i][1] == symbol && grid[i][2] == symbol) {
+			if (Objects.equals(grid[i][0], symbol) && Objects.equals(grid[i][1], symbol) && Objects.equals(grid[i][2], symbol)) {
 				return true; // found winning row
 			}
 		}
 
 		// check columns
 		for (int j = 0; j < 3; j++) {
-			if (grid[0][j] == symbol && grid[1][j] == symbol && grid[2][j] == symbol) {
+			if (Objects.equals(grid[0][j], symbol) && Objects.equals(grid[1][j], symbol) && Objects.equals(grid[2][j], symbol)) {
 				return true; // found winning column
 			}
 		}
 
 		// check diagonals
-		return (grid[0][0] == symbol && grid[1][1] == symbol && grid[2][2] == symbol) ||
-				grid[0][2] == symbol && grid[1][1] == symbol && grid[2][0] == symbol;
+		return (Objects.equals(grid[0][0], symbol) && Objects.equals(grid[1][1], symbol) && Objects.equals(grid[2][2], symbol)) ||
+				Objects.equals(grid[0][2], symbol) && Objects.equals(grid[1][1], symbol) && Objects.equals(grid[2][0], symbol);
 	}
 
 	public boolean isDraw() {
 		int count = 0;
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				if (grid[i][j] == ' ') {
+				if (Objects.equals(grid[i][j], emptySpace)) {
 					count++; // found empty cell
 					if (count > 1) {
 						return false; // game not draw
@@ -63,13 +66,13 @@ public class Board {
 
 	public String getBoardDisplay() {
 		StringBuilder display = new StringBuilder();
-		display.append("     1     2    3\n"); // column labels
+		display.append("       1        2       3\n"); // column labels
 
 		for (int i = 0; i < 3; i++) {
 			display.append((char)('a' + i)); // row labels
 			for (int j = 0; j < 3; j++) {
-				if (grid[i][j] == ' ') {
-					display.append(" | ").append("   "); // empty cell (wider for alignment)
+				if (grid[i][j].equals(emptySpace)) {
+					display.append(" | ").append(emptySpace); // empty cell
 				} else {
 					display.append(" | ").append(grid[i][j]); // occupied cell
 				}
@@ -79,7 +82,7 @@ public class Board {
 
 			// horizontal divider
 			if (i < 2) {
-				display.append("   -----------\n");
+				display.append("   -----------------\n");
 			}
 		}
 		return display.toString();
